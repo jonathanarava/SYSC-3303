@@ -57,7 +57,7 @@ public void sendAndReceive()
    //  5000 - the destination port number on the destination host.
    try {
       sendPacket = new DatagramPacket(msg, msg.length,
-                                      InetAddress.getLocalHost(), 5000);
+                                      InetAddress.getLocalHost(), 2000);
    } catch (UnknownHostException e) {
       e.printStackTrace();
       System.exit(1);

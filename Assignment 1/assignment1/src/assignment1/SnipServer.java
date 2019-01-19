@@ -9,6 +9,7 @@ public class SnipServer {
 	
 	DatagramPacket sendPacket, receivePacket;
 	DatagramSocket sendSocket, receiveSocket;
+	int portNumber2 = 2345;
 	
 	public SnipServer(){
 		   try {
@@ -20,7 +21,7 @@ public class SnipServer {
 		      // Construct a datagram socket and bind it to port 5000 
 		      // on the local host machine. This socket will be used to
 		      // receive UDP Datagram packets.
-		      receiveSocket = new DatagramSocket(2345);
+		      receiveSocket = new DatagramSocket(portNumber2);
 		      
 		      // to test socket timeout (2 seconds)
 		      //receiveSocket.setSoTimeout(2345);

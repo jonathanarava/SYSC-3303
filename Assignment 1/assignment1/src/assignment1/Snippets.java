@@ -14,6 +14,7 @@ public class Snippets {
 	
 DatagramPacket sendPacket, receivePacket;
 DatagramSocket sendReceiveSocket;
+int portNumber1 = 2345;
 
 public Snippets() {
 int j = 0;
@@ -75,7 +76,7 @@ for(int i=0;i<11; i++) {
 public void sendAndReceive(byte msg[]) {
 	try {
 	      sendPacket = new DatagramPacket(msg, msg.length,
-	                                      InetAddress.getLocalHost(), 2345);
+	                                      InetAddress.getLocalHost(), portNumber1);
 	   } catch (UnknownHostException e) {
 	      e.printStackTrace();
 	      System.exit(1);

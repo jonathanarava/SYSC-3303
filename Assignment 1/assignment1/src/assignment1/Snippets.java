@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Snippets {
 	
 DatagramPacket sendPacket, receivePacket;
-DatagramSocket sendReceiveSocket, receiveSocket;
+DatagramSocket sendReceiveSocket;
 int portNumber1 = 2121;
 
 public Snippets() {
@@ -32,6 +32,7 @@ public Snippets() {
 	for(int i=0;i<11; i++) {
 		
 		if (i == 10){
+			System.out.println("Client: Sending Invalid request packet:");
 			String in = "Invalid";
 			byte[] invalid = in.getBytes();
 			sendAndReceive(invalid);
@@ -121,12 +122,16 @@ public void sendAndReceive(byte msg[]) {
 	   System.out.println("Host port: " + receivePacket.getPort());
 	   len = receivePacket.getLength();
 	   System.out.println("Length: " + len);
-	   System.out.print("Containing: ");
-
+	   
 	   // Form a String from the byte array.
-	   String received = new String(data,0,len);   
+	   String received = new String(data,0,len);
+	   if(received.equals("Invalid")) {
+		   System.out.println("Invalid Request");
+		   System.exit(1);
+	   }
+	   System.out.print("Containing: ");
 	   System.out.println(received);
-
+	   System.out.println("-------------------------------------------");
 	   // We're finished, so close the socket.
 	   //sendReceiveSocket.close();
 }

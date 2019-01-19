@@ -58,16 +58,14 @@ public class SnipServer {
 	   System.out.println("Host port: " + receivePacket.getPort());
 	   int len = receivePacket.getLength();
 	   System.out.println("Length: " + len);
-	   System.out.print("Containing: " );
-
+	   
 	   // Form a String from the byte array.
-	   String received = new String(data,0,len);  
+	   String received = new String(data,0,len);
 	   
-	   if(received == "Invalid") {
-		   System.err.println("Invalid Request");
-		   System.exit(1);
-	  }
-	   
+	   if(received.equals("Invalid")) {
+		   serverClose(true);
+	   }
+	   System.out.print("Containing: " );
 	   System.out.println(received + "\n");
 	   
 	   // Slow things down (wait 5 seconds)
@@ -127,13 +125,29 @@ public class SnipServer {
 	   // We're finished, so close the sockets.
 	   //sendSocket.close();
 	   //receiveSocket.close();
+	   
+	  
 	}
+	
+	public void serverClose(boolean close){
+		if(close == true) {
+		System.out.println("Invalid Packet: Server Stopped");
+		sendSocket.close();
+		receiveSocket.close();
+		System.exit(1);
+		
+		}
+	}
+		
+		
+		
 
 public static void main( String args[] )
 {
    SnipServer c = new SnipServer();
    for(;;) {
 	   c.receiveAndEcho();
+	   
    }
    
 }

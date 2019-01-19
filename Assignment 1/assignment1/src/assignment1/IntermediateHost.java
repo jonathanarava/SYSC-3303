@@ -31,6 +31,15 @@ public class IntermediateHost {
 		   } 
 	}
 	
+	public static void main( String args[] )
+	{
+	   SnipServer c = new SnipServer();
+	   for(;;) {
+		   c.receiveAndEcho();
+		   
+	   }
+	   
+	}
 	
 	
 	

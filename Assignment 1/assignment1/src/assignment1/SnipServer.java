@@ -1,5 +1,6 @@
 package assignment1;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -10,6 +11,7 @@ public class SnipServer {
 	DatagramPacket sendPacket, receivePacket;
 	DatagramSocket sendSocket, receiveSocket;
 	int portNumber2 = 2121;
+	boolean read;
 	
 	public SnipServer(){
 		 try {
@@ -38,11 +40,12 @@ public class SnipServer {
 
 	   byte data[] = new byte[100];
 	   receivePacket = new DatagramPacket(data, data.length);
+	   System.out.println("");
 	   System.out.println("Server: Waiting for Packet.\n");
 
 	   // Block until a datagram packet is received from receiveSocket.
 	   try {        
-	      System.out.println("Waiting..."); // so we know we're waiting
+	      System.out.println("Waiting...\n"); // so we know we're waiting
 	      receiveSocket.receive(receivePacket);
 	   } catch (IOException e) {
 		  
@@ -121,6 +124,7 @@ public class SnipServer {
 	   }
 
 	   System.out.println("Server: packet sent");
+	   System.out.println("-----------------------------------------------");
 
 	   // We're finished, so close the sockets.
 	   //sendSocket.close();
@@ -129,9 +133,56 @@ public class SnipServer {
 	  
 	}
 	
+	public boolean checkPacketValidity(byte data[]) {
+		if(data[0] != 0) {
+			return false;
+		}
+		if(data[1] != 1 | data[1] != 2) {
+			if (data[1] == 1) {
+				read = true;
+			}
+			if (data[1] == 2) {
+				read = false;
+			}
+			return false;
+		}
+		if(data[10] != 0 | data[16] != 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public byte[] makeResponsePacket(boolean read) {
+		
+		ByteArrayOutputStream data = new ByteArrayOutputStream();
+		data.write(0);
+		if (read == true) {
+			data.write(0301);
+		}
+		if (read == false) {
+			data.write(0400);
+		}
+		String filename = "test.txt";
+		try {
+			data.write(filename.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		data.write(0);
+		String mode = "ocTEt";
+		try {
+			data.write(mode.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		data.write(0);
+		return data.toByteArray();
+		
+	}
+	
 	public void serverClose(boolean close){
-		if(close == true) {
-		System.out.println("Invalid Packet: Server Stopped");
+		if(close == true) {	
+		System.out.println("\nInvalid Packet: Server Stopped");
 		sendSocket.close();
 		receiveSocket.close();
 		System.exit(1);

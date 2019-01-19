@@ -31,21 +31,21 @@ try {
 for(int i=0;i<11; i++) {
 	
 	if (i == 10){
-		System.out.println("Invalid");
+		System.out.println("Invalid Request");
 	}
 	
 	else {
 		switch(j) {
 			case 0:
 				// read
-		        System.out.println("read"); 
+				System.out.println("Client: Sending read request packet:");
 		        j = 1;
 		        // starts with 01
 		        byte[] sendReadPacket = makePacket(true);
-		        System.out.println("Represented in Bytes: ");
+		        /*System.out.println("Represented in Bytes: ");
 		        System.out.println(Arrays.toString(sendReadPacket));
 		        System.out.println("Represented as a string: ");
-		        System.out.println(new String(sendReadPacket,0));
+		        System.out.println(new String(sendReadPacket,0));*/
 		        sendAndReceive(sendReadPacket);
 		        System.out.println();
 		        
@@ -54,14 +54,14 @@ for(int i=0;i<11; i++) {
 				
 			case 1:
 				//write
-		        System.out.println("write"); 
+				System.out.println("Client: Sending write request packet:"); 
 		        j=0;
 		        // starts with 02
 		        byte[] sendWritePacket=makePacket(false);
-		        System.out.println("Represented in Bytes: ");
+		        /*System.out.println("Represented in Bytes: ");
 		        System.out.println(Arrays.toString(sendWritePacket));		        
 		        System.out.println("Represented as a string: ");
-		        System.out.println(new String(sendWritePacket,0));
+		        System.out.println(new String(sendWritePacket,0));*/
 		        sendAndReceive(sendWritePacket);
 		        System.out.println();
 		        break;
@@ -72,7 +72,7 @@ for(int i=0;i<11; i++) {
 }
 }
 
-public void sendAndReceive(byte msg[] ) {
+public void sendAndReceive(byte msg[]) {
 	try {
 	      sendPacket = new DatagramPacket(msg, msg.length,
 	                                      InetAddress.getLocalHost(), 2345);
@@ -81,14 +81,18 @@ public void sendAndReceive(byte msg[] ) {
 	      System.exit(1);
 	   }
 
-	   System.out.println("Client: Sending packet:");
+	   //System.out.println("Client: Sending packet:");
 	   System.out.println("To host: " + sendPacket.getAddress());
 	   System.out.println("Destination host port: " + sendPacket.getPort());
 	   int len = sendPacket.getLength();
 	   System.out.println("Length: " + len);
-	   System.out.print("Containing: ");
+	   System.out.println("Containing: ");
+	   System.out.println("In string: ");
 	   System.out.println(new String(sendPacket.getData(),0,len)); // or could print "s"
-
+	   System.out.println("In bytes: ");
+	   System.out.println(Arrays.toString(msg));
+	   
+	   
 	   // Send the datagram packet to the server via the send/receive socket. 
 
 	   try {

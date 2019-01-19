@@ -2,12 +2,32 @@ package assignment1;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 
+
 public class Snippets {
+	
+DatagramPacket sendPacket, receivePacket;
+DatagramSocket sendReceiveSocket;
 
 public Snippets() {
 int j = 0;
+
+try {
+    // Construct a datagram socket and bind it to any available 
+    // port on the local host machine. This socket will be used to
+    // send and receive UDP Datagram packets.
+    sendReceiveSocket = new DatagramSocket();
+ } catch (SocketException se) {   // Can't create the socket.
+    se.printStackTrace();
+    System.exit(1);
+ }
+
 for(int i=0;i<11; i++) {
 	
 	if (i == 10){
@@ -21,12 +41,15 @@ for(int i=0;i<11; i++) {
 		        System.out.println("read"); 
 		        j = 1;
 		        // starts with 01
-		        byte[] sendReadPacket=makePacket(true);
+		        byte[] sendReadPacket = makePacket(true);
 		        System.out.println("Represented in Bytes: ");
 		        System.out.println(Arrays.toString(sendReadPacket));
 		        System.out.println("Represented as a string: ");
 		        System.out.println(new String(sendReadPacket,0));
+		        sendAndReceive(sendReadPacket);
 		        System.out.println();
+		        
+		        
 		        break;
 				
 			case 1:
@@ -39,7 +62,7 @@ for(int i=0;i<11; i++) {
 		        System.out.println(Arrays.toString(sendWritePacket));		        
 		        System.out.println("Represented as a string: ");
 		        System.out.println(new String(sendWritePacket,0));
-
+		        sendAndReceive(sendWritePacket);
 		        System.out.println();
 		        break;
 		}
@@ -47,6 +70,64 @@ for(int i=0;i<11; i++) {
 	}
 	
 }
+}
+
+public void sendAndReceive(byte msg[] ) {
+	try {
+	      sendPacket = new DatagramPacket(msg, msg.length,
+	                                      InetAddress.getLocalHost(), 2345);
+	   } catch (UnknownHostException e) {
+	      e.printStackTrace();
+	      System.exit(1);
+	   }
+
+	   System.out.println("Client: Sending packet:");
+	   System.out.println("To host: " + sendPacket.getAddress());
+	   System.out.println("Destination host port: " + sendPacket.getPort());
+	   int len = sendPacket.getLength();
+	   System.out.println("Length: " + len);
+	   System.out.print("Containing: ");
+	   System.out.println(new String(sendPacket.getData(),0,len)); // or could print "s"
+
+	   // Send the datagram packet to the server via the send/receive socket. 
+
+	   try {
+	      sendReceiveSocket.send(sendPacket);
+	   } catch (IOException e) {
+	      e.printStackTrace();
+	      System.exit(1);
+	   }
+
+	   System.out.println("Client: Packet sent.\n");
+
+	   // Construct a DatagramPacket for receiving packets up 
+	   // to 100 bytes long (the length of the byte array).
+
+	   byte data[] = new byte[100];
+	   receivePacket = new DatagramPacket(data, data.length);
+
+	   try {
+	      // Block until a datagram is received via sendReceiveSocket.  
+	      sendReceiveSocket.receive(receivePacket);
+	   } catch(IOException e) {
+	      e.printStackTrace();
+	      System.exit(1);
+	   }
+
+	   // Process the received datagram.
+	   System.out.println("Client: Packet received:");
+	   System.out.println("From host: " + receivePacket.getAddress());
+	   System.out.println("Host port: " + receivePacket.getPort());
+	   len = receivePacket.getLength();
+	   System.out.println("Length: " + len);
+	   System.out.print("Containing: ");
+
+	   // Form a String from the byte array.
+	   String received = new String(data,0,len);   
+	   System.out.println(received);
+
+	   // We're finished, so close the socket.
+	   sendReceiveSocket.close();
 }
 
 

@@ -2,6 +2,7 @@ package assignment1;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketException;
 
 public class IntermediateHost {
 
@@ -11,7 +12,28 @@ public class IntermediateHost {
 	int portNumber2 = 5043;
 	
 	public IntermediateHost() {
-		
+		try {
+		      // Construct a datagram socket and bind it to any available 
+		      // port on the local host machine. This socket will be used to
+		      // send UDP Datagram packets.
+		      sendSocket = new DatagramSocket(portNumber2);
+
+		      // Construct a datagram socket and bind it to port 5000 
+		      // on the local host machine. This socket will be used to
+		      // receive UDP Datagram packets.
+		      receiveSocket = new DatagramSocket(portNumber1);
+		      
+		      // to test socket timeout (2 seconds)
+		      //receiveSocket.setSoTimeout(2345);
+		   } catch (SocketException se) {
+		      se.printStackTrace();
+		      System.exit(1);
+		   } 
 	}
+	
+	
+	
+	
+	
 	
 }

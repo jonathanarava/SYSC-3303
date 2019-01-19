@@ -13,64 +13,58 @@ import java.util.Arrays;
 public class Snippets {
 	
 DatagramPacket sendPacket, receivePacket;
-DatagramSocket sendReceiveSocket;
-int portNumber1 = 2345;
+DatagramSocket sendReceiveSocket, receiveSocket;
+int portNumber1 = 2121;
 
 public Snippets() {
-int j = 0;
-
-try {
-    // Construct a datagram socket and bind it to any available 
-    // port on the local host machine. This socket will be used to
-    // send and receive UDP Datagram packets.
-    sendReceiveSocket = new DatagramSocket();
- } catch (SocketException se) {   // Can't create the socket.
-    se.printStackTrace();
-    System.exit(1);
- }
-
-for(int i=0;i<11; i++) {
+	int j = 0;
 	
-	if (i == 10){
-		System.out.println("Invalid Request");
-	}
+	try {
+	    // Construct a datagram socket and bind it to any available 
+	    // port on the local host machine. This socket will be used to
+	    // send and receive UDP Datagram packets.
+	    sendReceiveSocket = new DatagramSocket();
+	 } catch (SocketException se) {   // Can't create the socket.
+	    se.printStackTrace();
+	    System.exit(1);
+	 }
 	
-	else {
-		switch(j) {
-			case 0:
-				// read
-				System.out.println("Client: Sending read request packet:");
-		        j = 1;
-		        // starts with 01
-		        byte[] sendReadPacket = makePacket(true);
-		        /*System.out.println("Represented in Bytes: ");
-		        System.out.println(Arrays.toString(sendReadPacket));
-		        System.out.println("Represented as a string: ");
-		        System.out.println(new String(sendReadPacket,0));*/
-		        sendAndReceive(sendReadPacket);
-		        System.out.println();
-		        
-		        
-		        break;
-				
-			case 1:
-				//write
-				System.out.println("Client: Sending write request packet:"); 
-		        j=0;
-		        // starts with 02
-		        byte[] sendWritePacket=makePacket(false);
-		        /*System.out.println("Represented in Bytes: ");
-		        System.out.println(Arrays.toString(sendWritePacket));		        
-		        System.out.println("Represented as a string: ");
-		        System.out.println(new String(sendWritePacket,0));*/
-		        sendAndReceive(sendWritePacket);
-		        System.out.println();
-		        break;
+	for(int i=0;i<11; i++) {
+		
+		if (i == 10){
+			System.out.println("Invalid Request");
+			//sendReceiveSocket.close();
+			//receiveSocket.close();
 		}
-	
+		
+		else {
+			switch(j) {
+				case 0:
+					// read
+					System.out.println("Client: Sending read request packet:");
+			        j = 1;
+			        // starts with 01
+			        byte[] sendReadPacket = makePacket(true);
+			        sendAndReceive(sendReadPacket);
+			        System.out.println();
+			        
+			        
+			        break;
+					
+				case 1:
+					//write
+					System.out.println("Client: Sending write request packet:"); 
+			        j=0;
+			        // starts with 02
+			        byte[] sendWritePacket=makePacket(false);
+			        sendAndReceive(sendWritePacket);
+			        System.out.println();
+			        break;
+			}
+		
+		}
+		
 	}
-	
-}
 }
 
 public void sendAndReceive(byte msg[]) {
@@ -132,7 +126,7 @@ public void sendAndReceive(byte msg[]) {
 	   System.out.println(received);
 
 	   // We're finished, so close the socket.
-	   sendReceiveSocket.close();
+	   //sendReceiveSocket.close();
 }
 
 

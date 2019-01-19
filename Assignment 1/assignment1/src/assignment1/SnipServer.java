@@ -9,10 +9,10 @@ public class SnipServer {
 	
 	DatagramPacket sendPacket, receivePacket;
 	DatagramSocket sendSocket, receiveSocket;
-	int portNumber2 = 2345;
+	int portNumber2 = 2121;
 	
 	public SnipServer(){
-		   try {
+		 try {
 		      // Construct a datagram socket and bind it to any available 
 		      // port on the local host machine. This socket will be used to
 		      // send UDP Datagram packets.
@@ -118,14 +118,17 @@ public class SnipServer {
 	   System.out.println("Server: packet sent");
 
 	   // We're finished, so close the sockets.
-	   sendSocket.close();
-	   receiveSocket.close();
+	   //sendSocket.close();
+	   //receiveSocket.close();
 	}
 
 public static void main( String args[] )
 {
    SnipServer c = new SnipServer();
-   c.receiveAndEcho();
+   for(;;) {
+	   c.receiveAndEcho();
+   }
+   
 }
 }
 

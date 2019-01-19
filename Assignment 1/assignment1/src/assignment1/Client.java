@@ -27,6 +27,8 @@ public Client()
    }
 }
 
+ 
+ 
 public void sendAndReceive()
 {
    // Prepare a DatagramPacket and send it via sendReceiveSocket
@@ -57,7 +59,7 @@ public void sendAndReceive()
    //  5000 - the destination port number on the destination host.
    try {
       sendPacket = new DatagramPacket(msg, msg.length,
-                                      InetAddress.getLocalHost(), 2000);
+                                      InetAddress.getLocalHost(), 2345);
    } catch (UnknownHostException e) {
       e.printStackTrace();
       System.exit(1);
@@ -114,7 +116,8 @@ public void sendAndReceive()
 
 public static void main(String args[])
 {
-   Client c = new Client();
-   c.sendAndReceive();
+   //Client c = new Client();
+   //c.sendAndReceive();
+	
 }
 }

@@ -26,10 +26,10 @@ public Server()
       // Construct a datagram socket and bind it to port 5000 
       // on the local host machine. This socket will be used to
       // receive UDP Datagram packets.
-      receiveSocket = new DatagramSocket(2000);
+      receiveSocket = new DatagramSocket(2345);
       
       // to test socket timeout (2 seconds)
-      //receiveSocket.setSoTimeout(2000);
+      //receiveSocket.setSoTimeout(2345);
    } catch (SocketException se) {
       se.printStackTrace();
       System.exit(1);

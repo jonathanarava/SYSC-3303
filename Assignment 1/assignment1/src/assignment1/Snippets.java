@@ -22,8 +22,10 @@ for(int i=0;i<11; i++) {
 		        j = 1;
 		        // starts with 01
 		        byte[] sendReadPacket=makePacket(true);
+		        System.out.println("Represented in Bytes: ");
 		        System.out.println(Arrays.toString(sendReadPacket));
-		        
+		        System.out.println("Represented as a string: ");
+		        System.out.println(new String(sendReadPacket,0));
 
 		        break;
 				
@@ -33,7 +35,11 @@ for(int i=0;i<11; i++) {
 		        j=0;
 		        // starts with 02
 		        byte[] sendWritePacket=makePacket(false);
+		        System.out.println("Represented in Bytes: ");
 		        System.out.println(Arrays.toString(sendWritePacket));
+		        System.out.println("Represented as a string: ");
+		        
+		        
 		        break;
 		}
 	
@@ -42,10 +48,10 @@ for(int i=0;i<11; i++) {
 }
 }
 
-public String stringLength(byte [] sendPacket) {
-	int len = sendPacket.getLength();
-	return (new String(sendReadPacket.getData(),0,len)); 
-}
+//public String stringLength(byte [] sendPacket) {
+//	int len = sendPacket.getLength();
+//	return (new String(sendReadPacket.getData(),0,len)); 
+//}
 
 
 public byte[] makePacket(boolean read) {

@@ -32,7 +32,9 @@ public Snippets() {
 	for(int i=0;i<11; i++) {
 		
 		if (i == 10){
-			System.out.println("Invalid Request");
+			String in = "Invalid";
+			byte[] invalid = in.getBytes();
+			sendAndReceive(invalid);
 			//sendReceiveSocket.close();
 			//receiveSocket.close();
 		}

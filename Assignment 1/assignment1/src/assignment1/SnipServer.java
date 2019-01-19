@@ -45,6 +45,7 @@ public class SnipServer {
 	      System.out.println("Waiting..."); // so we know we're waiting
 	      receiveSocket.receive(receivePacket);
 	   } catch (IOException e) {
+		  
 	      System.out.print("IO Exception: likely:");
 	      System.out.println("Receive Socket Timed Out.\n" + e);
 	      e.printStackTrace();
@@ -60,12 +61,18 @@ public class SnipServer {
 	   System.out.print("Containing: " );
 
 	   // Form a String from the byte array.
-	   String received = new String(data,0,len);   
+	   String received = new String(data,0,len);  
+	   
+	   if(received == "Invalid") {
+		   System.err.println("Invalid Request");
+		   System.exit(1);
+	  }
+	   
 	   System.out.println(received + "\n");
 	   
 	   // Slow things down (wait 5 seconds)
 	   try {
-	       Thread.sleep(5000);
+	       Thread.sleep(1500);
 	   } catch (InterruptedException e ) {
 	       e.printStackTrace();
 	       System.exit(1);

@@ -46,6 +46,8 @@ public String stringLength(byte [] sendPacket) {
 	int len = sendPacket.getLength();
 	return (new String(sendReadPacket.getData(),0,len)); 
 }
+
+
 public byte[] makePacket(boolean read) {
 	ByteArrayOutputStream data = new ByteArrayOutputStream();
 	data.write(0);

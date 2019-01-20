@@ -46,7 +46,7 @@ public Client() {
 					// read request
 					System.out.println("Client: Sending read request packet:");
 			        j = 1; //sets j to 1 to go through case 1 (write request) on the next iteration 
-			        byte[] sendReadPacket = makePacket(true); // creates byte array with 01 as the staring bytes
+			        byte[] sendReadPacket = makeBArrayforPacket(true); // creates byte array with 01 as the staring bytes
 			        sendAndReceive(sendReadPacket); 
 			        System.out.println();
 			        break;
@@ -55,7 +55,7 @@ public Client() {
 					//write request
 					System.out.println("Client: Sending write request packet:"); 
 			        j=0; //sets j to 0 to go through case 0 (write request) on the next iteration
-			        byte[] sendWritePacket=makePacket(false); // byte array with 02 as the staring bytes
+			        byte[] sendWritePacket=makeBArrayforPacket(false); // byte array with 02 as the staring bytes
 			        sendAndReceive(sendWritePacket);
 			        System.out.println();
 			        break;
@@ -101,7 +101,7 @@ public void sendAndReceive(byte msg[]) {
 	   System.out.println("Client: Packet sent.\n");
 
 	   // Construct a DatagramPacket for receiving packets up 
-	   // to 100 bytes long (the length of the byte array).
+	   // to 4 bytes long (the length of the byte array).
 
 	   byte data[] = new byte[4];
 	   
@@ -126,20 +126,24 @@ public void sendAndReceive(byte msg[]) {
 	   String received = new String(data,0,len);
 	   System.out.print("Received packet containing: \n" + "In string:\n" + received + "\nIn byte array: \n" + Arrays.toString(data) + "\n");
 	   
-	   // To show end of a cycle (Client>Intermediate Host>Server>Intermediate Host>Client)
+	   // To show end of a cycle (Client   >   Intermediate Host   >   Server   >   Intermediate Host   >    Client)
 	   System.out.println("-------------------------------------------"); 
 	   
 }
 
 
-public byte[] makePacket(boolean read) {
+public byte[] makeBArrayforPacket(boolean read) {
+	/*Method makeBArrayforPacket(boolean read) takes in a boolean read and returns a byte array according to the value of the boolean entered
+	 * which is later made into a packet in the sendAndReceive(byte msg[]) method
+	 * read = true meaning that it is a read request
+	 * read = false meaning it is a write request*/
 	ByteArrayOutputStream data = new ByteArrayOutputStream();
-	data.write(0);
+	data.write(0); //As per specification - first byte 0
 	if (read == true) {
-		data.write(1);
+		data.write(1); //As per specification - second byte 1 if read request
 	}
 	if (read == false) {
-		data.write(2);
+		data.write(2); //As per specification - second byte 2 if write request
 	}
 	String filename = "test.txt";
 	try {
@@ -160,7 +164,6 @@ public byte[] makePacket(boolean read) {
 }
 	
 	
-
 public static void main(String args[]){
    Client s= new Client();
    

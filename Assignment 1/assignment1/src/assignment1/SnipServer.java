@@ -11,7 +11,7 @@ public class SnipServer {
 	
 	DatagramPacket sendPacket, receivePacket;
 	DatagramSocket sendSocket, receiveSocket;
-	int portNumber2 = 2121;
+	int portNumber2 = 69;
 	boolean read;
 	
 	public SnipServer(){

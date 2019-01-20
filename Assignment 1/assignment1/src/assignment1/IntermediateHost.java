@@ -1,52 +1,162 @@
 package assignment1;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
+import java.io.*;
+import java.net.*;
+import java.util.Arrays;
 
 public class IntermediateHost {
-
-	DatagramPacket sendPacket, receivePacket;
-	DatagramSocket sendSocket, receiveSocket;
-	int portNumber1 = 2345;
-	int portNumber2 = 5043;
 	
-	public IntermediateHost() {
+	public byte[] clientPacket;
+	public byte[] serverPacket;
+	DatagramPacket sendPacket, receivePacket; 
+	DatagramSocket sendReceieveSocketClient, sendReceieveSocketServer ;
+	
+	public IntermediateHost(){
 		try {
-		      // Construct a datagram socket and bind it to any available 
-		      // port on the local host machine. This socket will be used to
-		      // send UDP Datagram packets.
-		      sendSocket = new DatagramSocket(portNumber2);
-
-		      // Construct a datagram socket and bind it to port 5000 
-		      // on the local host machine. This socket will be used to
-		      // receive UDP Datagram packets.
-		      receiveSocket = new DatagramSocket(portNumber1);
-		      
-		      // to test socket timeout (2 seconds)
-		      //receiveSocket.setSoTimeout(2345);
-		   } catch (SocketException se) {
-		      se.printStackTrace();
-		      System.exit(1);
-		   } 
+			// Construct a datagram socket and bind it to any available 
+			// port on the local host machine. This socket will be used to
+			// send and receive UDP Datagram packets.
+			sendReceieveSocketClient = new DatagramSocket(23);
+			sendReceieveSocketServer = new DatagramSocket();
+			
+			} catch (SocketException se) {   // Can't create the socket.
+				se.printStackTrace();
+				System.exit(1);
+			}
 	}
 	
-	public void forward() {
+	public void sendAndReceiveClient()
+	   {
 		
-	}
-	
-	public static void main( String args[] )
-	{
-	   SnipServer c = new SnipServer();
-	   for(;;) {
-		   c.receiveAndEcho();
-		   
+	    // Construct a DatagramPacket for receiving packets up 
+	      // to 100 bytes long (the length of the byte array).
+
+	      byte data[] = new byte[20];
+	      receivePacket = new DatagramPacket(data, data.length);
+
+	      
+	      try {
+	    	  // Block until a datagram is received via sendReceiveSocket.  
+	    	  sendReceieveSocketClient.receive(receivePacket);
+	    	  
+	      	  System.out.println("Containing (as Bytes): " + Arrays.toString(data));
+	      	  
+	          System.out.println("Client: Packet received:");
+	          System.out.println("From host: " + receivePacket.getAddress());
+	          System.out.println("Host port: " + receivePacket.getPort());
+	          int len = receivePacket.getLength();
+	          System.out.println("Length: " + len);
+	          System.out.print("Containing (as String): ");
+	          String received = new String(data,0,len);   
+		      System.out.println(received + "\n\n");
+	        
+	      } catch(IOException e) {
+	         e.printStackTrace();
+	         System.exit(1);
+	      }
+
+
+	      // Form a String from the byte array.
+	      
+	      try {
+	         sendPacket = new DatagramPacket(data, data.length,
+	                                         InetAddress.getLocalHost(), 69);
+	      } catch (UnknownHostException e) {
+	         e.printStackTrace();
+	         System.exit(1);
+	      }
+	      
+	      /////////////
+
+	      try {
+	    	  sendReceieveSocketServer.send(sendPacket);
+	      } catch (IOException e) {
+	         e.printStackTrace();
+	         System.exit(1);
+	      }
+
+	      //System.out.println(" \n Client: Packet sent.\n");
+
+	  
+
+	      // We're finished, so close the socket.
+	      //sendReceieveSocketServer.close();
 	   }
-	   
+	
+	public void sendReceieveServer(){
+	  // Construct a DatagramPacket for receiving packets up 
+    // to 100 bytes long (the length of the byte array).
+
+    byte data[] = new byte[4];
+    receivePacket = new DatagramPacket(data, data.length);
+
+    try {
+       // Block until a datagram is received via sendReceiveSocket.  
+    	sendReceieveSocketServer.receive(receivePacket);
+    	System.out.println("Containing (as Bytes): " + Arrays.toString(data));
+  	  
+    	System.out.println("Client: Packet received:");
+    	System.out.println("From host: " + receivePacket.getAddress());
+    	System.out.println("Host port: " + receivePacket.getPort());
+    	int len = receivePacket.getLength();
+    	System.out.println("Length: " + len);
+    	System.out.print("Containing: ");
+      
+    	String received = new String(data,0,len);   
+    	System.out.println(received);
+    } catch(IOException e) {
+       e.printStackTrace();
+       System.exit(1);
+    }
+    
+    
+    try {
+        sendPacket = new DatagramPacket(data, data.length,
+                                        InetAddress.getLocalHost(), receivePacket.getPort());
+     } catch (UnknownHostException e) {
+        e.printStackTrace();
+        System.exit(1);
+     }
+
+     System.out.println("Client: Sending packet:");
+     System.out.println("To host: " + sendPacket.getAddress());
+     System.out.println("Destination host port: " + sendPacket.getPort());
+     int len = sendPacket.getLength();
+     System.out.println("Length: " + len);
+     System.out.print("Containing: ");
+     System.out.println(new String(sendPacket.getData(),0,len)); // or could print "s"
+
+     // Send the datagram packet to the server via the send/receive socket. 
+
+     try {
+   	  sendReceieveSocketServer.send(sendPacket);
+     } catch (IOException e) {
+        e.printStackTrace();
+        System.exit(1);
+     }
+
+     System.out.println("Client: Packet sent.\n");
+
+ 
+
+     // We're finished, so close the socket.
+     //sendReceieveSocketServer.close();
 	}
+
+    // Process the received datagram.
 	
-	
-	
-	
+	   
+
+    // Form a String from the byte array.
+    
+	public static void main(String args[]){
+		IntermediateHost c = new IntermediateHost();
+	    for(;;) { 
+		c.sendAndReceiveClient();
+	      c.sendReceieveServer();
+	    }
+	}
+
 	
 }
+

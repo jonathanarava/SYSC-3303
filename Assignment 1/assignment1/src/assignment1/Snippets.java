@@ -14,7 +14,7 @@ public class Snippets {
 	
 DatagramPacket sendPacket, receivePacket;
 DatagramSocket sendReceiveSocket;
-int portNumber1 = 2121;
+int portNumber1 = 23;
 
 public Snippets() {
 	int j = 0;

@@ -178,7 +178,7 @@ public class Server {
 	
 	public void serverClose(boolean close){
 		if(close == true) {	
-		System.out.println("\nInvalid Packet: Server Stopped");
+		System.out.println("\nServer: Invalid Packet\n*Server Haulted*");
 		sendSocket.close();
 		receiveSocket.close();
 		System.exit(1);

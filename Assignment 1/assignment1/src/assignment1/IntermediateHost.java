@@ -10,13 +10,14 @@ public class IntermediateHost {
 	public byte[] serverPacket;
 	DatagramPacket sendPacket, receivePacket, sendPacket1, receivePacket1; 
 	DatagramSocket sendReceieveSocketClient, sendReceieveSocketServer ;
+	int portNumber1 =23, portNumber2 =69;
 	
 	public IntermediateHost(){
 		try {
 			// Construct a datagram socket and bind it to any available 
 			// port on the local host machine. This socket will be used to
 			// send and receive UDP Datagram packets.
-			sendReceieveSocketClient = new DatagramSocket(23);
+			sendReceieveSocketClient = new DatagramSocket(portNumber1);
 			sendReceieveSocketServer = new DatagramSocket();
 			
 			} catch (SocketException se) {   // Can't create the socket.
@@ -59,7 +60,7 @@ public class IntermediateHost {
 	      
 	      try {
 	         sendPacket = new DatagramPacket(data, data.length,
-	                                         InetAddress.getLocalHost(), 69);
+	                                         InetAddress.getLocalHost(), portNumber2);
 	      } catch (UnknownHostException e) {
 	         e.printStackTrace();
 	         System.exit(1);

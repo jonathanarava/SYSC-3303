@@ -41,23 +41,20 @@ public Client() {
 		//As per specification- alternate between read (0 1) and write (0 2) requests
 		else {
 			switch(j) {
+				// i is inizialized at 0 to be a write request on the first iteration
 				case 0:
 					// read request
 					System.out.println("Client: Sending read request packet:");
-			        j = 1;
-			        // starts with 01
+			        j = 1; //sets j to 1 to go through case 1 (write request) on the next iteration 
 			        byte[] sendReadPacket = makePacket(true); // creates byte array with 01 as the staring bytes
-			        sendAndReceive(sendReadPacket);
+			        sendAndReceive(sendReadPacket); 
 			        System.out.println();
-			        
-			        
 			        break;
 					
 				case 1:
 					//write request
 					System.out.println("Client: Sending write request packet:"); 
-			        j=0;
-			        // starts with 02
+			        j=0; //sets j to 0 to go through case 0 (write request) on the next iteration
 			        byte[] sendWritePacket=makePacket(false); // byte array with 02 as the staring bytes
 			        sendAndReceive(sendWritePacket);
 			        System.out.println();
@@ -72,7 +69,7 @@ public Client() {
 public void sendAndReceive(byte msg[]) {
 	
 	/*Method sendAndReceive(byte msg[]) takes a byte array as a parameter and makes it into 
-	packet which it sends to a server and then waits to receive an acknowledgement from the server.*/
+	packet which it sends to a server and then waits to receive an acknowledgement packet from the server*/
 	
 	try {
 	      sendPacket = new DatagramPacket(msg, msg.length,

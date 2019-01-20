@@ -29,23 +29,24 @@ public Client() {
 	    System.exit(1);
 	 }
 	
+	/*As per specification the client will send and receive 11 times*/
 	for(int i=0;i<11; i++) {
-		
+		//As per specification- for the 11th try an invalid entry will be sent
 		if (i == 10){
 			System.out.println("Client: Sending Invalid request packet:");
 			String in = "Invalid";
 			byte[] invalid = in.getBytes();
 			sendAndReceive(invalid);
 		}
-		
+		//As per specification- alternate between read (0 1) and write (0 2) requests
 		else {
 			switch(j) {
 				case 0:
-					// read
+					// read request
 					System.out.println("Client: Sending read request packet:");
 			        j = 1;
 			        // starts with 01
-			        byte[] sendReadPacket = makePacket(true);
+			        byte[] sendReadPacket = makePacket(true); // creates byte array with 01 as the staring bytes
 			        sendAndReceive(sendReadPacket);
 			        System.out.println();
 			        
@@ -53,11 +54,11 @@ public Client() {
 			        break;
 					
 				case 1:
-					//write
+					//write request
 					System.out.println("Client: Sending write request packet:"); 
 			        j=0;
 			        // starts with 02
-			        byte[] sendWritePacket=makePacket(false);
+			        byte[] sendWritePacket=makePacket(false); // byte array with 02 as the staring bytes
 			        sendAndReceive(sendWritePacket);
 			        System.out.println();
 			        break;
@@ -69,6 +70,10 @@ public Client() {
 }
 
 public void sendAndReceive(byte msg[]) {
+	
+	/*Method sendAndReceive(byte msg[]) takes a byte array as a parameter and makes it into 
+	packet which it sends to a server and then waits to receive an acknowledgement from the server.*/
+	
 	try {
 	      sendPacket = new DatagramPacket(msg, msg.length,
 	                                      InetAddress.getLocalHost(), portNumber1);
@@ -89,7 +94,6 @@ public void sendAndReceive(byte msg[]) {
 	   
 	   
 	   // Send the datagram packet to the server via the send/receive socket. 
-
 	   try {
 	      sendReceiveSocket.send(sendPacket);
 	   } catch (IOException e) {
@@ -124,8 +128,9 @@ public void sendAndReceive(byte msg[]) {
 	   // Form a String from the byte array.
 	   String received = new String(data,0,len);
 	   System.out.print("Received packet containing: \n" + "In string:\n" + received + "\nIn byte array: \n" + Arrays.toString(data) + "\n");
-	  
-	   System.out.println("-------------------------------------------");
+	   
+	   // To show end of a cycle (Client>Intermediate Host>Server>Intermediate Host>Client)
+	   System.out.println("-------------------------------------------"); 
 	   
 }
 

@@ -126,7 +126,7 @@ public void sendAndReceive(byte msg[]) {
 	   
 	   // Form a String from the byte array.
 	   String received = new String(data,0,len);
-	   System.out.print("Received packet containing: \n" + "In byte array: \n" + Arrays.toString(data) + "\n");
+	   System.out.print("Received packet containing: \n" + "In string:\n" + received + "\nIn byte array: \n" + Arrays.toString(data) + "\n");
 	  // System.out.println(Arrays.toString(data));
 	   System.out.println("-------------------------------------------");
 	   // We're finished, so close the socket.

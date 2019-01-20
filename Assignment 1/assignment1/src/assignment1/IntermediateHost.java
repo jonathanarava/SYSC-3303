@@ -31,6 +31,10 @@ public class IntermediateHost {
 		   } 
 	}
 	
+	public void forward() {
+		
+	}
+	
 	public static void main( String args[] )
 	{
 	   SnipServer c = new SnipServer();

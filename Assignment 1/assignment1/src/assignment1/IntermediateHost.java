@@ -39,7 +39,7 @@ public class IntermediateHost {
 	    	  // Block until a datagram is received via sendReceiveSocket.  
 	    	  sendReceieveSocketClient.receive(receivePacket);
 	    	  
-	      	  System.out.println("Containing (as Bytes): " + Arrays.toString(data));
+	      	  System.out.println("Intermediate Host: sending packet to server\n" + "Containing (as Bytes): " + Arrays.toString(data));
 	      	  
 	          System.out.println("Client: Packet received:");
 	          System.out.println("From host: " + receivePacket.getAddress());
@@ -84,6 +84,7 @@ public class IntermediateHost {
 	   }
 	
 	public void sendReceieveServer(){
+		
 	  // Construct a DatagramPacket for receiving packets up 
     // to 100 bytes long (the length of the byte array).
 
@@ -93,7 +94,7 @@ public class IntermediateHost {
     try {
        // Block until a datagram is received via sendReceiveSocket.  
     	sendReceieveSocketServer.receive(receivePacket);
-    	System.out.println("Containing (as Bytes): " + Arrays.toString(data));
+    	System.out.println("Intermediate Host: receiving packet from server\n" + "Containing (as Bytes): " + Arrays.toString(data));
   	  
     	System.out.println("Client: Packet received:");
     	System.out.println("From host: " + receivePacket.getAddress());
@@ -118,8 +119,8 @@ public class IntermediateHost {
         System.exit(1);
      }
 
-     System.out.println("Client: Sending packet:");
-     System.out.println("To host: " + sendPacket.getAddress());
+     System.out.println("Intermediate Host: Sending packet to client:");
+     System.out.println("Intermediate Host: Sending packet to client:\n" +"To host: " + sendPacket.getAddress());
      System.out.println("Destination host port: " + sendPacket.getPort());
      int len = sendPacket.getLength();
      System.out.println("Length: " + len);
@@ -138,16 +139,13 @@ public class IntermediateHost {
      System.out.println("Client: Packet sent.\n");
 
  
-
-     // We're finished, so close the socket.
-     //sendReceieveSocketServer.close();
 	}
 
-    // Process the received datagram.
+  
 	
 	   
 
-    // Form a String from the byte array.
+    
     
 	public static void main(String args[]){
 		IntermediateHost c = new IntermediateHost();

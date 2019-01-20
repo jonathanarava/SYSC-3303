@@ -39,7 +39,7 @@ public class SnipServer {
 	   // Construct a DatagramPacket for receiving packets up 
 	   // to 100 bytes long (the length of the byte array).
 
-	   byte data[] = new byte[100];
+	   byte data[] = new byte[20];
 	   byte responseData[] = new byte[4];
 	   receivePacket = new DatagramPacket(data, data.length);
 	   System.out.println("");

@@ -25,10 +25,9 @@ public class IntermediateHost {
 			}
 	}
 	
-	public void sendAndReceiveClient()
-	   {
+	public void sendAndReceiveClient(){
 		
-	    // Construct a DatagramPacket for receiving packets up 
+	      // Construct a DatagramPacket for receiving packets up 
 	      // to 100 bytes long (the length of the byte array).
 
 	      byte data[] = new byte[17];
@@ -66,7 +65,7 @@ public class IntermediateHost {
 	         System.exit(1);
 	      }
 	      
-	      /////////////
+	      //
 
 	      try {
 	    	  sendReceieveSocketServer.send(sendPacket);
@@ -75,17 +74,12 @@ public class IntermediateHost {
 	         System.exit(1);
 	      }
 	      System.out.println("Intermediate Host: Packet sent to server\n");
-	      //System.out.println(" \n Client: Packet sent.\n");
 
-	  
-
-	      // We're finished, so close the socket.
-	      //sendReceieveSocketServer.close();
 	   }
 	
 	public void sendReceieveServer(){
 		
-	  // Construct a DatagramPacket for receiving packets up 
+    // Construct a DatagramPacket for receiving packets up 
     // to 100 bytes long (the length of the byte array).
 
     byte data[] = new byte[4];

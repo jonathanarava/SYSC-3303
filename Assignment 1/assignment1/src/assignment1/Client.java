@@ -36,8 +36,6 @@ public Client() {
 			String in = "Invalid";
 			byte[] invalid = in.getBytes();
 			sendAndReceive(invalid);
-			//sendReceiveSocket.close();
-			//receiveSocket.close();
 		}
 		
 		else {
@@ -86,7 +84,6 @@ public void sendAndReceive(byte msg[]) {
 	   System.out.println("Length: " + len);
 	   System.out.println("Containing: ");
 	   System.out.println("In string: " + new String(sendPacket.getData(),0,len));
-	   //System.out.println(new String(sendPacket.getData(),0,len)); // or could print "s"
 	   System.out.println("In byte array: ");
 	   System.out.println(Arrays.toString(msg));
 	   
@@ -127,10 +124,9 @@ public void sendAndReceive(byte msg[]) {
 	   // Form a String from the byte array.
 	   String received = new String(data,0,len);
 	   System.out.print("Received packet containing: \n" + "In string:\n" + received + "\nIn byte array: \n" + Arrays.toString(data) + "\n");
-	  // System.out.println(Arrays.toString(data));
+	  
 	   System.out.println("-------------------------------------------");
-	   // We're finished, so close the socket.
-	   //sendReceiveSocket.close();
+	   
 }
 
 

@@ -71,7 +71,7 @@ public class Server {
 	   System.out.print("Containing: \n" );
 	   System.out.println("In string: " + received + "\n" + "In byte array: \n" + Arrays.toString(data) + "\n" );
 	   
-	   // Slow things down (wait 5 seconds)
+	   // Slow things down (wait 1.5 seconds)
 	   try {
 	       Thread.sleep(1500);
 	   } catch (InterruptedException e ) {
@@ -115,15 +115,9 @@ public class Server {
 	   System.out.print("Containing: ");
 	   System.out.println(Arrays.toString(responseData));
 	   // or (as we should be sending back the same thing)
-	   // System.out.println(received); 
-	     
-	   
-	   
-	   //byte[] sendPacket = makeResponsePacket(read);;
+	       
        
-       
-       
-	   // Send the datagram packet to the client via the send socket. 
+  	   // Send the datagram packet to the client via the send socket. 
 	   try {
 	      sendSocket.send(sendPacket);
 	   } catch (IOException e) {
@@ -133,10 +127,6 @@ public class Server {
 
 	   System.out.println("Server: packet sent");
 	   System.out.println("-----------------------------------------------");
-
-	   // We're finished, so close the sockets.
-	   //sendSocket.close();
-	   //receiveSocket.close();
 	   
 	  
 	}

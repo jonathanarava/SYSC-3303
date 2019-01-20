@@ -9,6 +9,11 @@ import java.util.Arrays;
 
 public class Server {
 	
+/*Server waits to recieve packets from the Client through the IntermediatHost and then replys
+accordingly depending on whether it is a write or read request. Printing statments where 
+neccessary to show user of the progess of the packet transaction*/
+	
+	// Variable Declaration
 	DatagramPacket sendPacket, receivePacket;
 	DatagramSocket sendSocket, receiveSocket;
 	int portNumber2 = 69;
@@ -126,48 +131,59 @@ public class Server {
 	   }
 
 	   System.out.println("Server: packet sent");
+	   // To show end of a cycle
 	   System.out.println("-----------------------------------------------");
 	   
 	  
 	}
 	
 	public boolean checkPacketValidity(byte data[]) {
-		if(data[0] != 0) {
-			serverClose(true);
-			
+		// checks the validity of the packet received as per specifications
+		if(data[0] != 0) { 
+			// if contents of packet does not start with 0 then packet is invalid
+			serverClose(true); // quit server if packet is invalid
 			return false;
 		}
 		if(data[1] != 1 || data[1] != 2) {
-			if (data[1] == 1) {
-				read = true;
+			// if the second byte of packet does is not 1 or 2 then packet is invalid
+			if (data[1] == 1) {	
+				//If contents of packet in byte 1 is 1, then it is a read request and a 
+				//specific response will be generated using makeResponsePacket method
+				read = true; 
 				return true;
 			}
 			if (data[1] == 2) {
+				//If contents of packet in byte 1 is 2, then it is a write request and a 
+				//specific response will be generated using makeResponsePacket method
 				read = false;
 				return true;
 			}
-			serverClose(true);
-			
+			serverClose(true); // quit server if packet is invalid
 			return false;
 		}
 		if(data[10] != 0 | data[16] != 0) {
-			serverClose(true);
+			// As per specification - byte 10 and byte 16 should be 0
+			serverClose(true); // quit server if packet is invalid
 			
 			return false;
 		}
-		return true;
+		return true; //program continues if packet is valid
 	}
 	
 	public byte[] makeResponsePacket(boolean read) {
+		/*makeResponsePacket method generates a response depending on the packet sent
+		whether it is a read or write*/
 		
 		ByteArrayOutputStream responseData = new ByteArrayOutputStream();
 		responseData.write(0);
 		if (read == true) {
+			//As per specification
 			responseData.write(3);
 			responseData.write(0);
 			responseData.write(1);
 		}
 		if (read == false) {
+			//As per specification
 			responseData.write(4);
 			responseData.write(0);
 			responseData.write(0);
@@ -177,12 +193,12 @@ public class Server {
 	}
 	
 	public void serverClose(boolean close){
+		//serverClose method prints out an error messsage, then closes the servers and the utilized Sockets
 		if(close == true) {	
 		System.out.println("\nServer: Invalid Packet\n*Server Haulted*");
 		sendSocket.close();
 		receiveSocket.close();
 		System.exit(1);
-		
 		}
 	}
 		
@@ -191,7 +207,7 @@ public class Server {
 public static void main( String args[] )
 {
    Server c = new Server();
-   for(;;) {
+   for(;;) { // infinite loop is used for the Server to be always listening for the Intermediate Host
 	   c.receiveAndEcho();
 	   
    }

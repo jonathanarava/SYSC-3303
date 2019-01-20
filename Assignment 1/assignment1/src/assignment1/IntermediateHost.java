@@ -5,12 +5,16 @@ import java.net.*;
 import java.util.Arrays;
 
 public class IntermediateHost {
-	
+
+/*IntermediateHost receives packets from CLient and then forwards it the Server and then waits for a reply packet from the Server 
+which it forwards to the Client. Printing information of the progress of the packet flow as needed*/
+
+	// Variable Declaration
 	public byte[] clientPacket;
 	public byte[] serverPacket;
 	DatagramPacket sendPacket, receivePacket, sendPacket1, receivePacket1; 
 	DatagramSocket sendReceieveSocketClient, sendReceieveSocketServer ;
-	int portNumber1 =23, portNumber2 =69;
+	int portNumber1 = 23, portNumber2 = 69; //As per specification - client sends packet to portNumber1, server receives packet to portNumber2
 	
 	public IntermediateHost(){
 		try {
@@ -27,6 +31,7 @@ public class IntermediateHost {
 	}
 	
 	public void sendAndReceiveClient(){
+		 //sendAndReceiveClient method receives packet from client and forwards it to the server
 		
 	      // Construct a DatagramPacket for receiving packets up 
 	      // to 100 bytes long (the length of the byte array).
@@ -79,64 +84,65 @@ public class IntermediateHost {
 	   }
 	
 	public void sendReceieveServer(){
-		
-    // Construct a DatagramPacket for receiving packets up 
-    // to 100 bytes long (the length of the byte array).
-
-    byte data[] = new byte[4];
-    receivePacket1 = new DatagramPacket(data, data.length);
-
-    try {
-       // Block until a datagram is received via sendReceiveSocket.  
-    	sendReceieveSocketServer.receive(receivePacket1);
-    	System.out.println("Intermediate Host: receiving packet from server\n" + "Containing (as Bytes): " + Arrays.toString(data));
-  	  
-    	System.out.println("Intermediate Host: Packet received:");
-    	System.out.println("From host: " + receivePacket1.getAddress());
-    	System.out.println("Host port: " + receivePacket1.getPort());
-    	int len = receivePacket1.getLength();
-    	System.out.println("Length: " + len);
-    	String received = new String(data,0,len);
-    	System.out.print("Containing:\n" + "In string:\n" + received + "\nIn byte array:" + Arrays.toString(data) );
-  
-    } catch(IOException e) {
-       e.printStackTrace();
-       System.exit(1);
-    }
-    
-    
-    try {
-        sendPacket1 = new DatagramPacket(data, data.length,
-                                        InetAddress.getLocalHost(), receivePacket.getPort());
-     } catch (UnknownHostException e) {
-        e.printStackTrace();
-        System.exit(1);
-     }
-
-     System.out.println("Intermediate Host: sending packet to client:\n" +"To host: " + sendPacket1.getAddress());
-     System.out.println("Destination host port: " + receivePacket.getPort());
-     int len = sendPacket1.getLength();
-     System.out.println("Length: " + len);
-     System.out.print("Containing: ");
-     System.out.println(new String(sendPacket1.getData(),0,len)); // or could print "s"
-
-     // Send the datagram packet to the server via the send/receive socket. 
-
-     try {
-   	  sendReceieveSocketServer.send(sendPacket1);
-     } catch (IOException e) {
-        e.printStackTrace();
-        System.exit(1);
-     }
-
-     System.out.println("Intermediate Host: Packet sent.\n");
-     System.out.println("----------------------------------------------------");
+		//sendReceieveServer method receives packet from Server and forwards it to the Client	
+			
+	    // Construct a DatagramPacket for receiving packets up 
+	    // to 100 bytes long (the length of the byte array).
+	
+	    byte data[] = new byte[4];
+	    receivePacket1 = new DatagramPacket(data, data.length);
+	
+	    try {
+	       // Block until a datagram is received via sendReceiveSocket.  
+	    	sendReceieveSocketServer.receive(receivePacket1);
+	    	System.out.println("Intermediate Host: receiving packet from server\n" + "Containing (as Bytes): " + Arrays.toString(data));
+	  	  
+	    	System.out.println("Intermediate Host: Packet received:");
+	    	System.out.println("From host: " + receivePacket1.getAddress());
+	    	System.out.println("Host port: " + receivePacket1.getPort());
+	    	int len = receivePacket1.getLength();
+	    	System.out.println("Length: " + len);
+	    	String received = new String(data,0,len);
+	    	System.out.print("Containing:\n" + "In string:\n" + received + "\nIn byte array:" + Arrays.toString(data) );
+	  
+	    } catch(IOException e) {
+	       e.printStackTrace();
+	       System.exit(1);
+	    }
+	    
+	    
+	    try {
+	        sendPacket1 = new DatagramPacket(data, data.length,
+	                                        InetAddress.getLocalHost(), receivePacket.getPort());
+	     } catch (UnknownHostException e) {
+	        e.printStackTrace();
+	        System.exit(1);
+	     }
+	
+	     System.out.println("Intermediate Host: sending packet to client:\n" +"To host: " + sendPacket1.getAddress());
+	     System.out.println("Destination host port: " + receivePacket.getPort());
+	     int len = sendPacket1.getLength();
+	     System.out.println("Length: " + len);
+	     System.out.print("Containing: ");
+	     System.out.println(new String(sendPacket1.getData(),0,len)); // or could print "s"
+	
+	     // Send the datagram packet to the server via the send/receive socket. 
+	
+	     try {
+	   	  sendReceieveSocketServer.send(sendPacket1);
+	     } catch (IOException e) {
+	        e.printStackTrace();
+	        System.exit(1);
+	     }
+	
+	     System.out.println("Intermediate Host: Packet sent.\n");
+	     System.out.println("----------------------------------------------------");
 
 	}
     
 	public static void main(String args[]){
 		IntermediateHost c = new IntermediateHost();
-	    for(;;) { 
+	    for(;;) { // infinite loop is used for the Intermediate Host to be always listening for the Client
 	    	c.sendAndReceiveClient();
 	    	c.sendReceieveServer();
 	    }

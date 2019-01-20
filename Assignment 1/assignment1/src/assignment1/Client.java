@@ -12,6 +12,10 @@ import java.util.Arrays;
 
 public class Client {
 	
+/*Client class sends alternating read and write requests to Server through Intermediate Host
+As per specification - 11 iterations of alternating read and write requests with the 11th iteration being an invalid request*/
+
+// Variable Declaration
 DatagramPacket sendPacket, receivePacket;
 DatagramSocket sendReceiveSocket;
 int portNumber1 = 23;
@@ -31,7 +35,7 @@ public Client() {
 	
 	/*As per specification the client will send and receive 11 times*/
 	for(int i=0;i<11; i++) {
-		//As per specification- for the 11th try an invalid entry will be sent
+		//As per specification - for the 11th try an invalid entry will be sent
 		if (i == 10){
 			System.out.println("Client: Sending Invalid request packet:");
 			String in = "Invalid";
@@ -151,14 +155,14 @@ public byte[] makeBArrayforPacket(boolean read) {
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
-	data.write(0);
+	data.write(0); //As per specification -  byte 2 between the filename and mode is 0
 	String mode = "ocTEt";
 	try {
 		data.write(mode.getBytes());
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
-	data.write(0);
+	data.write(0); //As per specification - last byte is 0
 	return data.toByteArray();
 	
 }

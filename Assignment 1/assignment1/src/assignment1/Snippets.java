@@ -87,7 +87,7 @@ public void sendAndReceive(byte msg[]) {
 	   System.out.println("Containing: ");
 	   System.out.println("In string: ");
 	   System.out.println(new String(sendPacket.getData(),0,len)); // or could print "s"
-	   System.out.println("In bytes: ");
+	   System.out.println("In byte array: ");
 	   System.out.println(Arrays.toString(msg));
 	   
 	   
@@ -105,7 +105,8 @@ public void sendAndReceive(byte msg[]) {
 	   // Construct a DatagramPacket for receiving packets up 
 	   // to 100 bytes long (the length of the byte array).
 
-	   byte data[] = new byte[100];
+	   byte data[] = new byte[4];
+	   
 	   receivePacket = new DatagramPacket(data, data.length);
 
 	   try {
@@ -129,8 +130,8 @@ public void sendAndReceive(byte msg[]) {
 		   System.out.println("Invalid Request");
 		   System.exit(1);
 	   }
-	   System.out.print("Containing: ");
-	   System.out.println(received);
+	   System.out.print("Received packet containing: \n" + "In byte array: \n");
+	   System.out.println(Arrays.toString(data));
 	   System.out.println("-------------------------------------------");
 	   // We're finished, so close the socket.
 	   //sendReceiveSocket.close();

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.Arrays;
 
 public class SnipServer {
 	
@@ -39,6 +40,7 @@ public class SnipServer {
 	   // to 100 bytes long (the length of the byte array).
 
 	   byte data[] = new byte[100];
+	   byte responseData[] = new byte[4];
 	   receivePacket = new DatagramPacket(data, data.length);
 	   System.out.println("");
 	   System.out.println("Server: Waiting for Packet.\n");
@@ -65,11 +67,9 @@ public class SnipServer {
 	   // Form a String from the byte array.
 	   String received = new String(data,0,len);
 	   
-	   if(received.equals("Invalid")) {
-		   serverClose(true);
-	   }
-	   System.out.print("Containing: " );
-	   System.out.println(received + "\n");
+	   checkPacketValidity(data);
+	   System.out.print("Containing: \n" );
+	   System.out.println("In string: " + received + "\n" + "In byte array: \n" + Arrays.toString(data) + "\n" );
 	   
 	   // Slow things down (wait 5 seconds)
 	   try {
@@ -102,7 +102,9 @@ public class SnipServer {
 	   //     datagram, and use that as the destination port for the echoed
 	   //     packet.
 
-	   sendPacket = new DatagramPacket(data, receivePacket.getLength(),
+	   responseData = makeResponsePacket(read);
+	   
+	   sendPacket = new DatagramPacket(responseData, responseData.length,
 	                            receivePacket.getAddress(), receivePacket.getPort());
 
 	   System.out.println( "Server: Sending packet:");
@@ -111,10 +113,16 @@ public class SnipServer {
 	   len = sendPacket.getLength();
 	   System.out.println("Length: " + len);
 	   System.out.print("Containing: ");
-	   System.out.println(new String(sendPacket.getData(),0,len));
+	   System.out.println(Arrays.toString(responseData));
 	   // or (as we should be sending back the same thing)
 	   // System.out.println(received); 
 	     
+	   
+	   
+	   //byte[] sendPacket = makeResponsePacket(read);;
+       
+       
+       
 	   // Send the datagram packet to the client via the send socket. 
 	   try {
 	      sendSocket.send(sendPacket);
@@ -135,18 +143,26 @@ public class SnipServer {
 	
 	public boolean checkPacketValidity(byte data[]) {
 		if(data[0] != 0) {
+			serverClose(true);
+			
 			return false;
 		}
-		if(data[1] != 1 | data[1] != 2) {
+		if(data[1] != 1 || data[1] != 2) {
 			if (data[1] == 1) {
 				read = true;
+				return true;
 			}
 			if (data[1] == 2) {
 				read = false;
+				return true;
 			}
+			serverClose(true);
+			
 			return false;
 		}
 		if(data[10] != 0 | data[16] != 0) {
+			serverClose(true);
+			
 			return false;
 		}
 		return true;
@@ -154,29 +170,19 @@ public class SnipServer {
 	
 	public byte[] makeResponsePacket(boolean read) {
 		
-		ByteArrayOutputStream data = new ByteArrayOutputStream();
-		data.write(0);
+		ByteArrayOutputStream responseData = new ByteArrayOutputStream();
+		responseData.write(0);
 		if (read == true) {
-			data.write(0301);
+			responseData.write(3);
+			responseData.write(0);
+			responseData.write(1);
 		}
 		if (read == false) {
-			data.write(0400);
+			responseData.write(4);
+			responseData.write(0);
+			responseData.write(0);
 		}
-		String filename = "test.txt";
-		try {
-			data.write(filename.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		data.write(0);
-		String mode = "ocTEt";
-		try {
-			data.write(mode.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		data.write(0);
-		return data.toByteArray();
+		return responseData.toByteArray();
 		
 	}
 	
